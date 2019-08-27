@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReplaceWords</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
+
+</head>
+
+<body>
+
+    {% extends "Navigation.html" %}
+
+     {% block content %}
+        <h4 style="margin-left:50px;margin-top: 20px"> Replace Selected Words</h4>
+        <div class="InputFileds">
+            <form action="{% url "ReplaceWords" %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                    <h4 style="display: inline-block;margin-top: 4px">Select File:</h4>
+                    <input id="uploadRWfile" type="file" title="Upload excel file" name="ReplaceWords_file" class="Commoninput" required="required">
+                    <input type="submit"  class="button" value="Upload Files" style="margin-top: 10px;height: 40px; width: 8%; border: 1px solid gray; border-radius: 2px; cursor: pointer">
+            </form>
+        </div>
+
+         <table class="displaytable" contenteditable="false">
+            {% for row in replaceData %}
+                <tr>
+                {% for cell in row %}
+                    <td>{{ cell }}&nbsp;</td>
+                {% endfor %}
+                </tr>
+            {%  endfor %}
+        </table>
+
+        <a class="next" href="{% url 'ControlSettings' %}">Next</a>
+
+    {% endblock %}
+
+</body>
+
+</html>

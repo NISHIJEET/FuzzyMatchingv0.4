@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ControlSettings</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
+</head>
+
+<body>
+
+    {% extends "Navigation.html" %}
+
+     {% block content %}
+         <form method="post" enctype="multipart/form-data">
+
+                <h4 style="margin-left:50px;margin-top: 20px"> Define Control Settings here</h4>
+                <Div class="mainControlSettings" >
+
+                    {% csrf_token %}
+                    <div class="CSinputfileds">
+                        <label for="matches" style="margin-left: 20px">Number Of Matches To Find:</label>
+                        <input id="matches" type="number" name="Matches" min="10" max="100"  class= "CSinputs" style="margin-left: 111px" required="required">
+                    </div >
+
+                    <div class="CSinputfileds">
+                        <label for="mimMQ" style="margin-left: 20px">Minimum Acceptable Match Quality:</label>
+                        <input id="mimMQ" type="number" name="MinMQ" min="10" max="100" class= "CSinputs" style="margin-left: 60px"  required="required">
+                    </div>
+
+                    <div class="CSinputfileds">
+                        <label for="mimMQ" style="margin-left: 20px">Acceptable Match Quality Range/Drop:</label>
+                        <input id="drop" type="number" name="Drop" min="10" max="100" class= "CSinputs" style="margin-left: 45px"  required="required">
+                    </div>
+
+                    <div class="CSinputfileds">
+                        <label for="mimMQ" style="margin-left: 20px">Good Quality Match:</label>
+                        <input id="goodmatch" type="number" name="Goodmatch" min="10" max="100" class= "CSinputs" style="margin-left: 162px"  required="required">
+                    </div>
+
+                    <div class="CSinputfileds">
+                        <label for="mimMQ" style="margin-left: 20px">Moderate Quality Match:</label>
+                        <input id="moderatematch" type="number" name="Moderatematch" min="10" max="100" class= "CSinputs" style="margin-left: 134px"  required="required">
+                    </div>
+
+                    <div class="CSinputfileds" style="margin-left: 25px;margin-bottom: 50px">
+                        <input type="submit" class="button" value="Run Fuzzy Macth " style="height: 45px; width: 12%; border: 1px solid gray; border-radius: 2px; cursor: pointer">
+                    </div>
+
+                </Div>
+
+         </form>
+
+    {% endblock %}
+
+</body>
+
+</html>

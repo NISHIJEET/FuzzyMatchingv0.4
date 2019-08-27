@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CatFieldSelection</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
+</head>
+
+<body onload="myfunc()">
+
+    {% extends "Navigation.html" %}
+
+     {% block content %}
+
+         <h4 style="margin-left:50px;margin-top: 20px">Categorical Field Selections</h4>
+         <div class="columnnsconcat">
+             <label style="margin-left: 10px;margin-top: 8px;font-size: larger;">Select Categorical fields:</label>
+             <form style="width: 20%;margin: 5px;">
+                <select name="SelectCommonColumns"  id="DDLActivites" data-style="btn-default" class="selectpicker form-control" multiple>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                </select>
+                <input type="submit" style="height: 40px; width: 60%; border: 1px solid gray; border-radius: 2px; cursor: pointer" class="button" value="Save Selections">
+            </form>
+         </div>
+
+         <h4 style="margin-left:50px;margin-top: 20px">Define Weights</h4>
+         <div class="columnnsconcat">
+            <form  style="margin: 10px;" action="">
+                First name: <input type="number" name="firstname" value="Mickey" style="margin:6px">
+                <br>
+                Last name:<input type="number" name="lastname" value="Mouse" style="margin:10px">
+
+                <br>
+                <input type="submit" value="Submit" style="height: 40px; width: 60%; border: 1px solid gray; border-radius: 2px; cursor: pointer"  class="button">
+            </form>
+         </div>
+
+         <div>
+            <a class="next" href="{% url 'PreRun' %}">Next</a>
+         </div>
+
+    {% endblock %}
+
+</body>
+
+</html>

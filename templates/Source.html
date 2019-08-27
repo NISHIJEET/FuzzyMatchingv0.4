@@ -1,0 +1,71 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en" xmlns="http://www.w3.org/1999/html">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <title>Source</title>#}
+{#    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>#}
+{#</head>#}
+
+{#<body>#}
+
+{% extends "Navigation.html" %}
+
+{% block content %}
+    <h4 style="margin-left:50px;margin-top: 20px"> Browse Input Files</h4>
+    <div class="InputFileds">
+        <form onsubmit="uploaded();return false" action="#" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+                <h4 style="display: inline-block;">Select Source File:</h4>
+                <input id="uploadFile1" type="file" placeholder="uploadFile1" title=" "
+                       name="excel_file1" class="Commoninput" required="required">
+            </div>
+            <div style="margin-top: 5px"><h4 style="display: inline-block">Select ITM File:</h4>
+                <input id="uploadFile2" placeholder="uploadFile2" type="file" title="Upload excel file"
+                       name="excel_file2" class="Commoninput" style="margin-left:1px;" required="required">
+            </div>
+            <input class="button" type="submit" value="Upload Files"
+                   style="margin-top: 10px;height: 40px; width: 100px; border: 1px solid gray; border-radius: 2px; cursor: pointer">
+        </form>
+    </div>
+
+
+    {% if bFileSelected %}
+        <div id="DisplayTable">
+            <p id="fileTitle1">Source File</p>
+            <table id="table_1" class="displaytable" contenteditable="false">
+                {% for row in excel_data1 %}
+                    <tr>
+                        {% for cell in row %}
+                            <td>{{ cell }}&nbsp;</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <p id="fileTitle2">ITM File</p>
+            <table class="displaytable" contenteditable="false">
+                {% for row in excel_data2 %}
+                    <tr>
+                        {% for cell in row %}
+                            <td>{{ cell }}&nbsp;&nbsp;</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% else  %}
+
+        <div id = "DisplayTable" style="color: white;">No data</div>
+    {% endif %}
+
+    <div>
+        <a class="next" onclick=" return ValidateFiles()" href="{% url 'SelectColumns' %}">Next</a>
+    </div>
+
+{% endblock %}
+
+{#</body>#}
+
+{#</html>#}
