@@ -1,42 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReplaceWords</title>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
+{% extends "Navigation.html" %}
 
-</head>
+{% block content %}
 
-<body>
+    <div class="flex-subcontaioner">
+        <div class="subnavigation" id="1"><a id="columns" style=" text-decoration: none; color: white;" class="link navlink"
+                                             href="{% url 'ConcatCommonFields' %}">Concat Fields</a></div>
+        <div class="subnavigation" id="2"><a id="concate" style=" text-decoration: none;color:white" class="link navlink">Categorical
+            Fields</a></div>
+        {#        <div class="subnavigation" id="3"  ><a id="prerun" style=" text-decoration: none;" class="link navlink" href="{% url 'PreRun' %}">Pre Run</a></div>#}
+        <div class="subnavigation" id="4" style="background-color: white"><a id="replacewords" style=" text-decoration: none;color: black" class="link navlink">Replace
+            Words</a></div>
+        <div class="subnavigation" id="5"><a id="csettings" style=" text-decoration: none;color: white" class="link navlink">Control
+            Settings</a></div>
+    </div>
 
-    {% extends "Navigation.html" %}
 
-     {% block content %}
-        <h4 style="margin-left:50px;margin-top: 20px"> Replace Selected Words</h4>
-        <div class="InputFileds">
-            <form action="{% url "ReplaceWords" %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                    <h4 style="display: inline-block;margin-top: 4px">Select File:</h4>
-                    <input id="uploadRWfile" type="file" title="Upload excel file" name="ReplaceWords_file" class="Commoninput" required="required">
-                    <input type="submit"  class="button" value="Upload Files" style="margin-top: 10px;height: 40px; width: 8%; border: 1px solid gray; border-radius: 2px; cursor: pointer">
-            </form>
+    <div class="InputFileds instruction">
+    The list shows the suggested replacement that will help to get more alike data set. You can also add items to the list in the required format for replacement.
+    </div>
+    <div class="layout">
+        <h4 class="topsection"> Replace Words From Other File</h4>
+        <div style="margin-top: 15px;margin-left: 67%">
+        <a class="next" style="text-decoration: none;color: darkorange" href="{% url 'ControlSettings' %}">Next</a>
         </div>
+    </div>
+    <div class="InputFileds">
+        <form action="{% url "ReplaceWords" %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="layout">
+                <h5 class="pagetitle">Select File:</h5>
+                <div class="instruction InputFileds" style="height: 20%;">Selected file should contain only two columns with out header.</div>
+            </div>
+            <input id="uploadRWfile" type="file" title="Upload excel file" name="ReplaceWords_file" class="Commoninput"
+                   required="required">
+            <input type="submit" class="button" value="Upload Files" style="margin-top: 10px;height: 30px; width: 8%; border: 1px solid gray; border-radius: 2px; cursor: pointer">
+        </form>
+    </div>
 
-         <table class="displaytable" contenteditable="false">
-            {% for row in replaceData %}
-                <tr>
-                {% for cell in row %}
-                    <td>{{ cell }}&nbsp;</td>
-                {% endfor %}
-                </tr>
-            {%  endfor %}
+
+    <h4 class="topsection"> Replace Words From Given List</h4>
+
+    <div >
+        <table class="displaytable" contenteditable="false" >
+            {% for col_val in replaceData.columns.tolist %}
+                <th style="width: 50%;background-color:lightgray">
+                    {{ col_val }}
+                </th>
+            {% endfor %}
         </table>
 
-        <a class="next" href="{% url 'ControlSettings' %}">Next</a>
+        <table class="displaytable" contenteditable="false">
+            {% for index, row in replaceData.iterrows %}
+                <tr>
+                    {% for str_val in row.values %}
+                        <th style="width: 50%">{{ str_val }}</th>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
 
-    {% endblock %}
+{#        <form method="POST" enctype="multipart/form-data" action="{% url 'ReplaceWords' %}">#}
+{#            {% csrf_token %}#}
+{#            <button class="button" type="submit" value="Upload Files" style="margin-top: 10px;height: 30px;margin-left:89.5%"  >Replace Words</button>#}
+{#        </form>#}
 
-</body>
+    </div>
 
-</html>
+    <div id="status" style="color: white;">{{ ColumnLength }}</div>
+
+    <script>
+         function alertFunction() {
+             var status;
+             status = document.getElementById('status').innerText;
+             console.log(status);
+             if (status=="False"){
+                 alert('The uploaded file contains more than required. Please upload a valid file.');
+             }
+         }
+         window.onload = alertFunction;
+      </script>
+
+{#    <a class="next" style="text-decoration: none;color: darkorange" href="{% url 'ControlSettings' %}">Next</a>#}
+
+{% endblock %}

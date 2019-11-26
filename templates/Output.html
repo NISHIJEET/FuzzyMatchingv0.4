@@ -1,0 +1,81 @@
+{% extends "Navigation.html" %}
+{% load static %}
+{% block content %}
+
+
+    <div class="flex-subcontaioner">
+        <div class="subnavigation" id="Input1" style="background-color: white"><a id="columns" style=" text-decoration: none; color: black" class="link navlink" href="{% url 'Source' %}">Output</a>
+        </div>
+{#        <div class="subnavigation" id="Input2"><a id="concate" style=" text-decoration: none;" class="link navlink" href="{}">Reports</a></div>#}
+    </div>
+
+    <div class="InputFileds instruction">
+        This section displays the result for the selections made by user in previous sections.
+    </div>
+
+
+
+    <div style="display: flex;flex-direction: row;margin-top: 10px">
+        <div style="width: 40%">
+            <input  type="text" id="myInput" onkeyup="mySearchFunction()" placeholder="Search results.." title="Type in something" style="background-image: url({% static 'Images/icons8-search-24.png' %});width: 50% ">
+        </div>
+        <div style="display: flex;flex-direction: row;width: 40%;" >
+            <div style="border-radius: 5px ;background-color: lightcoral;padding: 2%;font-size: 16px;width: 25%"> Total Records: {{ Total }}</div>
+            <div style="margin-left: 10%;border-radius: 5px;background-color: lightsteelblue;padding: 2%;text-align: center;font-size: 16px">100% Match Records: {{ MatchScore }} </div>
+            <div style="margin-left: 10%;border-radius: 5px;background-color: lightblue;padding: 2%;align-content: center;font-size: 16px">Perfect Match Type: {{ MatchType }}</div>
+        </div>
+        <div style="width: 20%;margin-top: 1%">
+            <a class="next" style="text-decoration: none;color: darkorange;margin-left: 58%" href="{% url 'Download' %}">Download</a>
+        </div>
+    </div>
+
+    <h4 class="topsection" >Match Results</h4>
+    <div style="width: 94.5%;height: 61%;overflow-y: auto" >
+    <div style="overflow-x: auto;">
+        <table class="displaytable" id="myTable">
+            {% for cell in df.columns.tolist %}
+                <th style="background-color: lightgray;">{{ cell }}&nbsp;</th>
+            {% endfor %}
+
+
+            {% for index,row in df.iterrows %}
+                <tr style="width: 40%">
+                    {% for str_val in row.values %}
+                        <th>{{ str_val }}&nbsp;</th>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    </div>
+
+    <script>
+        function mySearchFunction() {
+            var input, filter, table, tr, td, i,j,tw,th, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            th = table.getElementsByTagName("th");
+            tw = document.getElementById('myTable').rows[0].cells.length
+            console.log(tw);
+            for (i = 0; i < tr.length; i++) {
+                for (j=0 ; j< th.length ; j++){
+                td = tr[i].getElementsByTagName("th")[j];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        console.log(txtValue)
+                        tr[i].style.display = "";
+                        break;
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+                }
+            }
+        }
+    </script>
+
+{% endblock %}
+

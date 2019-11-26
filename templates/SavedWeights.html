@@ -1,0 +1,116 @@
+{% extends "Navigation.html" %}
+{% load static %}
+{% block content %}
+
+    <div class="flex-subcontaioner">
+        <div class="subnavigation" id="1"><a id="columns" style=" text-decoration: none;color: white " class="link navlink" href="{% url 'ConcatCommonFields' %}">Concat Fields</a></div>
+        <div class="subnavigation" id="2"><a id="concate" style=" text-decoration: none;color: black" class="link navlink">Categorical Fields</a></div>
+        {#        <div class="subnavigation" id="3"  ><a id="prerun" style=" text-decoration: none;" class="link navlink" href="{% url 'PreRun' %}">Pre Run</a></div>#}
+        <div class="subnavigation" id="4"><a id="replacewords" style=" text-decoration: none;color: white" class="link navlink">Replace Words</a></div>
+        <div class="subnavigation" id="5"><a id="csettings" style=" text-decoration: none;color: white" class="link navlink">Control Settings</a></div>
+    </div>
+
+    <div class="InputFileds instruction">
+        Select the fields you want to define as category and for remaining ones you need to assign weights. The default
+        weight is 0 here.
+    </div>
+
+    <div class="layout">
+        <h4 class="topsection">Categorical Field Selections</h4>
+        <div style="margin-top: 15px;margin-left: 69.5%">
+            <a class="next" style="text-decoration: none;color: darkorange" onclick="return ValidateIfWeightisEmpty()" href="{% url 'ReplaceWords' %}">Next</a>
+        </div>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" action="{% url 'SavedWeights' %}" >
+        {% csrf_token %}
+        <div class="columnnsconcat">
+            <h4 style="margin-left: 10px;margin-top: 8px;">Select Categorical fields:</h4>
+            <div style="width: 20%;margin: 5px;display: flex;flex-direction: row">
+                <div>
+                    <select name="SelectCatColumns" id="SelectCatColumns" data-style="btn-default"
+                            class="selectpicker form-control" multiple onchange="GetColumnsToWeight(this)">
+                        {% for col in column_list %}
+
+                                {% if col in categoricalField %}
+                                    <option selected value={{ col }}>{{ col }}</option>
+                                {% else %}
+                                    <option value={{ col }}>{{ col }}</option>
+                                {% endif %}
+
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+        </div>
+        <div id="weights">
+            <h4 class="topsection">Define Weights</h4>
+            <div class="columnnsconcat" id="columnnsconcat">
+                {% for key,val in weights.items %}
+                    <div style="width: 100px;margin: 10px;display: block" name="weights" id={{ key }}>{{ key }}
+                        <input type="number" style="display: block;width: 100%" min="1" max="30" value={{ val }}  name={{ key }} >
+                    </div>
+                {% endfor %}
+                {% for cat in categoricalField %}
+                 <div style="width: 100px;margin: 10px;display: none" name="weights" id={{ cat }}>{{ cat }}
+                     <input type="number"   style="display: block;width: 100%" min="1" max="30" value=1 name={{ cat }}>
+                 </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+        <input type="submit" value="Submit" style="height: 30px; width: 8%; margin-left: 4%;margin-top: 0%" class="button">
+    </form>
+
+{#    <div>#}
+{#        <input type="image" style="margin-left: 10px;margin-top: 0px"#}
+{#               src="{% static 'Images/tick.png' %}" alt="Submit" width="35" height="35" onclick="GetColumnsToWeight()">#}
+{#    </div>#}
+
+    <div style="margin-left: 50px;width: 94.5%">
+
+        <div id="fileTitle2" class="tabletititles" style="margin-left: 0px">Source File</div>
+        <div style="overflow-x: auto">
+            <table class="displaytable" contenteditable="false" style="margin-left: 0px">
+
+                {% for cell in data_source.columns.tolist %}
+                    <th style="background-color: #cccccc">{{ cell }}&nbsp;</th>
+                {% endfor %}
+
+                {% for index,row in data_source.head.iterrows %}
+                    <tr style="width: 40%">
+                        {% for str_val in row.values %}
+                            <th>{{ str_val }}&nbsp;</th>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div id="fileTitle2" class="tabletititles" style="margin-left: 0px">ITM File</div>
+        <div style="overflow-x: auto">
+            <table class="displaytable" contenteditable="false" style="margin-left: 0px">
+
+                {% for cell in data.columns.tolist %}
+                    <th style="background-color: #cccccc">{{ cell }}&nbsp;</th>
+                {% endfor %}
+
+                {% for index,row in data.head.iterrows %}
+                    <tr style="width: 40%">
+                        {% for str_val in row.values %}
+                            <th>{{ str_val }}&nbsp;</th>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {#        <div>#}
+        {#            <a class="next" style="text-decoration: none;color: darkorange" onclick="return ValidateIfWeightisEmpty()"#}
+        {#               href="{% url 'ReplaceWords' %}">Next</a>#}
+        {#        </div>#}
+    </div>
+
+{% endblock %}
+
+

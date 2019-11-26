@@ -1,71 +1,187 @@
-{#<!DOCTYPE html>#}
-{#<html lang="en" xmlns="http://www.w3.org/1999/html">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
-{#    <title>Source</title>#}
-{#    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>#}
-{#</head>#}
-
-{#<body>#}
-
 {% extends "Navigation.html" %}
-
+{% load static %}
 {% block content %}
-    <h4 style="margin-left:50px;margin-top: 20px"> Browse Input Files</h4>
-    <div class="InputFileds">
-        <form onsubmit="uploaded();return false" action="#" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div>
-                <h4 style="display: inline-block;">Select Source File:</h4>
-                <input id="uploadFile1" type="file" placeholder="uploadFile1" title=" "
-                       name="excel_file1" class="Commoninput" required="required">
-            </div>
-            <div style="margin-top: 5px"><h4 style="display: inline-block">Select ITM File:</h4>
-                <input id="uploadFile2" placeholder="uploadFile2" type="file" title="Upload excel file"
-                       name="excel_file2" class="Commoninput" style="margin-left:1px;" required="required">
-            </div>
-            <input class="button" type="submit" value="Upload Files"
-                   style="margin-top: 10px;height: 40px; width: 100px; border: 1px solid gray; border-radius: 2px; cursor: pointer">
-        </form>
+
+    <div class="flex-subcontaioner" >
+        <div class="subnavigation" id="Input1" style="background-color: white;"><a id="columns" style=" text-decoration: none;color: black " class="link navlink">Input Source/ITM</a></div>
+        <div class="subnavigation" id="Input2"><a id="concate" style=" text-decoration: none;color: white" class="link navlink">Common Columns</a></div>
     </div>
 
-
-    {% if bFileSelected %}
-        <div id="DisplayTable">
-            <p id="fileTitle1">Source File</p>
-            <table id="table_1" class="displaytable" contenteditable="false">
-                {% for row in excel_data1 %}
-                    <tr>
-                        {% for cell in row %}
-                            <td>{{ cell }}&nbsp;</td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            </table>
-
-            <p id="fileTitle2">ITM File</p>
-            <table class="displaytable" contenteditable="false">
-                {% for row in excel_data2 %}
-                    <tr>
-                        {% for cell in row %}
-                            <td>{{ cell }}&nbsp;&nbsp;</td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
-    {% else  %}
-
-        <div id = "DisplayTable" style="color: white;">No data</div>
-    {% endif %}
 
     <div>
-        <a class="next" onclick=" return ValidateFiles()" href="{% url 'SelectColumns' %}">Next</a>
+
+        <div class="InputFileds instruction">
+            Provide source and items to match(ITM) file to run fuzzy match.
+            Both the files need to be in excel (xlsm) format and the data should be present in the first sheet of the
+            file.
+        </div>
+
+        <div style="display: flex;flex-direction: row">
+            <div>
+                <img title="Required fields" src="{% static 'Images/asterisk.png' %}" width="15" height="15" style="margin-top: 23px;margin-left: 45px;margin-right: 5px">
+            </div>
+            <div >
+                <h4 class="topsection" style="margin-left: 0px;"> Browse Input Files</h4>
+            </div>
+            <div style="margin-top: 15px;margin-left: 75%">
+                <a class="next" style="text-decoration: none;color: darkorange;" onclick=" return ValidateFiles()" href="{% url 'SelectColumns' %}">Next</a>
+            </div>
+        </div>
+
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="InputFileds">
+                {% csrf_token %}
+
+                <div>
+                    <div class="layout">
+                        <h5 class="pagetitle">Source File:</h5>
+                        <div class="instruction InputFileds" style="height: 20%;">'Source File' will be the file you want
+                            to match your data against.
+                        </div>
+                    </div>
+                    <div class="layout">
+                        <div style="width: 2.5%">
+                            <img src="{% static 'Images/icons8-microsoft-excel-48.png' %}" width="30" height="35"
+                                 style="margin-left: 0px">
+                        </div>
+                        <div class="Commoninput layout">
+                            <input id="uploadFile1" accept=".xlsx" type="file" title="Upload Source file"
+                                   name="excel_file1" required="required"
+                                   style=" padding-top: 2px;color: transparent; width: 40%" onchange="pressed()">
+                            {% if bFileSelected %}
+                                <div id="fileLabel" class="displayfilename">{{ excel_File1 }}</div>
+                            {% else %}
+                                <div id="fileLabel" style="margin-top: 5px;"></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 5px">
+                    <div class="layout">
+                        <h5 class="pagetitle">ITM File:</h5>
+                        <div class="instruction InputFileds " style="height: 20%">(ITM) 'Items to Match' will be the
+                            file we want to match with the source.
+                        </div>
+                    </div>
+                    <div class="layout">
+                        <div style="width: 2.5%">
+                            <img src="{% static 'Images/icons8-microsoft-excel-48.png' %}" width="30" height="35"
+                                 style="margin-left: 0px">
+                        </div>
+                        <div class="layout">
+                            <div class="Commoninput layout">
+                                <input id="uploadFile2" accept=".xlsx" type="file" title="Upload ITM file"
+                                       name="excel_file2" required="required"
+                                       style=" padding-top: 2px;color: transparent;width: 40%; margin-left: 1px"
+                                       onchange="pressed1()">
+                                {% if bFileSelected %}
+                                    <div id="fileLabe2" class="displayfilename">{{ excel_File2 }}</div>
+                                {% else %}
+                                    <div id="fileLabe2" style="margin-top: 5px"></div>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button class="button" type="submit" value="Upload Files"
+                        style="margin-top: 5px;height: 30px;margin-left: 3.9%">Upload Files
+                </button>
+            </div>
+        </form>
+
+
+        <div id="message" style="display: none;">{{ contains_Column }}</div>
+
+        {% if bFileSelected %}
+
+            <div style="display: flex;flex-direction: row;margin-left: 4%">
+                <div style="width: 15%; background-color: lightcoral;padding: 2%;border-radius: 5px">Rows in Source: {{ TotalSource }}</div>
+                <div style="width: 15%; background-color: lightblue;padding: 2%;margin-left: 2%;border-radius: 5px">Rows in ITM: {{ TotalITM }}</div>
+
+            </div>
+
+            <div id="DisplayTable" style="margin-left: 50px;max-width: 94.5%">
+                <tbody>
+                <div id="fileTitle1" class="tabletititles" style="margin-left: 0px">Source File</div>
+                <div style="overflow-x: auto">
+
+                    <table class="displaytable" contenteditable="false" style="margin-left: 0px">
+
+                        {% for cell in excel_data1.columns.tolist %}
+                            <th style="background-color: lightgray;">{{ cell }}&nbsp;</th>
+                        {% endfor %}
+                        {% for index,row in excel_data1.head.iterrows %}
+                            <tr style="width: 40%">
+                                {% for str_val in row.values %}
+                                    <th>{{ str_val }}&nbsp;</th>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+                </div>
+
+                </tbody>
+
+                <div id="fileTitle2" class="tabletititles" style="margin-left: 0px">ITM File</div>
+                <div style="overflow-x: auto">
+                <table class="displaytable" contenteditable="false" style="margin-left: 0px" >
+
+                    {% for cell in excel_data2.columns.tolist %}
+                        <th style="background-color: lightgray;">{{ cell }}&nbsp;</th>
+                    {% endfor %}
+                    {% for index,row in excel_data2.head.iterrows %}
+                        <tr style="width: 40%">
+                            {% for str_val in row.values %}
+                                <th>{{ str_val }}&nbsp;</th>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+            </div>
+        {% else %}
+            <div id="DisplayTable" style="color: white;">No data</div>
+        {% endif %}
+
+        <div>
+{#            <a class="next" style="text-decoration: none;color: darkorange;" onclick=" return ValidateFiles()" href="{% url 'SelectColumns' %}">Next</a>#}
+        </div>
     </div>
+
+    <script>
+
+        window.pressed = function () {
+            var a = document.getElementById('uploadFile1');
+            console.log("Shikha");
+            if (a.value == "") {
+                fileLabel.innerHTML = "Choose file";
+            }
+            else {
+                var theSplit = a.value.split('\\');
+                fileLabel.innerHTML = theSplit[theSplit.length - 1];
+            }
+        };
+
+         window.pressed1 = function () {
+            var a = document.getElementById('uploadFile2');
+            console.log("Shikha");
+            if (a.value == "") {
+                fileLabe2.innerHTML = "Choose file";
+            }
+            else {
+                var theSplit = a.value.split('\\');
+                fileLabe2.innerHTML = theSplit[theSplit.length - 1];
+            }
+        };
+
+    </script>
 
 {% endblock %}
 
-{#</body>#}
-
-{#</html>#}

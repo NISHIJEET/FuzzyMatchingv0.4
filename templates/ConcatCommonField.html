@@ -1,0 +1,93 @@
+{% extends "Navigation.html" %}
+
+{% block content %}
+
+    <div class="flex-subcontaioner">
+        <div class="subnavigation" id="1" style="background-color: white"><a id="columns" style=" text-decoration: none;color: black " class="link navlink">Concat Fields</a></div>
+        <div class="subnavigation" id="2"><a id="concate" style=" text-decoration: none;;color: white" class="link navlink">Categorical Fields</a></div>
+        {#        <div class="subnavigation" id="3"  ><a id="prerun" style=" text-decoration: none;" class="link navlink" href="{% url 'PreRun' %}">Pre Run</a></div>#}
+        <div class="subnavigation" id="4"><a id="replacewords" style=" text-decoration: none;;color: white" class="link navlink">Replace Words</a></div>
+        <div class="subnavigation" id="5"><a id="csettings" style=" text-decoration: none;;color: white" class="link navlink">Control Settings</a></div>
+    </div>
+
+    <div class="InputFileds instruction">
+        You can concat (combine) two fields (columns) and replace the old ones with the new concatenated field. The changes will reflect in
+        both the source and ITM.
+    </div>
+
+    <div class="layout">
+        <h4 class="topsection"> Cancatenate Fields</h4>
+        <div style="margin-top: 15px;margin-left: 75.5%">
+            <a class="next" style="text-decoration: none;color: darkorange" href="{% url 'CatFieldSelection' %}">Next</a>
+        </div>
+    </div>
+    <div class="columnnsconcat">
+
+        <form style="margin: 5px;" method="POST" enctype="multipart/form-data"
+              action="{% url 'ConcatFields' %}">
+            {% csrf_token %}
+            <h5 style="margin-top: 8px;font-size: 16px">Fields to Concat:</h5>
+            <select name="concatFields" id="DDLActivites" data-style="btn-default"
+                    class="selectpicker form-control" multiple style="width: 20%">
+                {% for col in column_list %}
+                    <option value={{ col }}>{{ col }}</option>
+                {% endfor %}
+            </select>
+            <h5 style="margin-top: 8px;font-size: 16px">Rename Field:</h5>
+            <div style="display: flex;flex-direction: row;">
+
+                <div>
+                    <input style="width: 100%;height: 30px; border-radius: 5px;border: 1px solid lightgray ;"
+                           type="text" name="fname" id="fname"><br>
+                </div>
+
+                <input type="submit" class="button" style="height: 30px; width: 60%;margin-top: 0px"
+                       value="Concat Fields" onclick="return ValidateReplaceField()">
+            </div>
+        </form>
+    </div>
+    <div style="margin-left: 50px;width: 94.5%">
+        <p id="fileTitle1"></p>
+        <div class="tabletititles" style="margin-left: 0px">Source Data</div>
+        <div style="overflow-x: auto">
+            <table class="displaytable" contenteditable="false" style="margin-left: 0px">
+
+                {% for cell in data_source.columns.tolist %}
+                    <th style="background-color: lightgray">{{ cell }}&nbsp;</th>
+                {% endfor %}
+
+
+                {% for index,row in data_source.head.iterrows %}
+                    <tr style="width: 40%">
+                        {% for str_val in row.values %}
+                            <th>{{ str_val }}&nbsp;</th>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <p id="fileTitle1"></p>
+        <div class="tabletititles" style="margin-left: 0px">ITM Data</div>
+        <div style="overflow-x: auto">
+            <table class="displaytable" contenteditable="false" style="margin-left: 0px">
+
+                {% for cell in data.columns.tolist %}
+                    <th style="background-color: lightgray">{{ cell }}&nbsp;</th>
+                {% endfor %}
+
+
+                {% for index,row in data.head.iterrows %}
+                    <tr style="width: 40%">
+                        {% for str_val in row.values %}
+                            <th>{{ str_val }}&nbsp;</th>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{#    <div>#}
+{#        <a class="next" style="text-decoration: none;color: darkorange" href="{% url 'CatFieldSelection' %}">Next</a>#}
+{#    </div>#}
+
+{% endblock %}

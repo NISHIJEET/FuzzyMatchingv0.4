@@ -8,36 +8,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet/less" type="text/css" href="{% static 'css/index.less' %}">
     <link rel="stylesheet/less" type="text/css" href="{% static 'css/navigation.less' %}">
+    <link rel="stylesheet/less" type="text/css" href="{% static 'css/index.less' %}">
     <link rel="stylesheet/less" type="text/css" href="{% static 'css/importFile.less' %}">
     <link rel="stylesheet/less" type="text/css" href="{% static 'css/controlSettings.less' %}">
+    <link rel="stylesheet/less" type="text/css" href="{% static 'css/output.less.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/css/bootstrap-select.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/css/bootstrap-select.min.css">
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/js/bootstrap-select.min.js"></script>
     <script src="{% static 'js/index.js' %}"></script>
+    <script src="{% static 'js/navigation.js' %}"></script>
+{#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>#}
+
 </head>
 
-<body >
+<body onload="myfunc()">
 
+<div class=flex-container-mainheader  >
 
-    <div class=flex-container-mainheader>
-        <div class="flex-sideheader">
-            <div>
-                <img width="50" height="49.5" src="{% static 'Images/ZS_Associates_Logo.jpg' %}">
-            </div>
-            <div style="flex-grow: 9;align-items:center;font-size: x-large;padding-left: 20px;color: white"> eZSt Fuzzy MatchMaker Pro</div>
+    <div class="flex-sideheader" style="background-color: rgb(31, 78, 120)" >
+        <div>
+            <img width="50" height="44.5"  id="clearNotes" src="{% static 'Images/ZS_Associates_Logo.jpg' %}" >
         </div>
-
-        <div class="flex-rightsideheader">
-            <div><a class="link" href="{% url 'Home' %}"><img style="margin-top: 8px" width="35" height=35" src="{% static 'Images/icons8-home-50.png' %}"></a></div>
-        </div>
+        <div class="navigation-title" style="font-size: 25px">eZSt Fuzzy MatchMaker Pro</div>
     </div>
 
-    {% block content %}
 
-    {% endblock %}
+    <div class="flex-rightsideheader" style="background-color: rgb(31, 78, 120)" >
+{#        style="background-image: url({% static 'Images/1.jpg' %})#}
+
+        <!-- Trigger/Open The Modal -->
+        <!-- The Modal -->
+        <div id="myModal" class="modal" style="width: 100%;line-height: 80%">
+            <!-- Modal content -->
+            <span class="close" style="color: red; font-size: 50px;margin-right: 8%">&times;</span>
+            <div id="Notes" class="modal-content" contenteditable="true">
+            </div>
+        </div>
+
+
+        <div class="main_nav_item" id="main_input">
+            <a id="main_input_link" class="link navlink"  style=" text-decoration: none;color: white " href="{% url 'Source' %}">Input</a>
+        </div>
+        <div class="main_nav_item" id="main_config">
+            <a id="main_config_link"  class="link navlink"
+              style=" text-decoration: none;color: white; " href="{% url 'ConcatCommonFields' %}">Configure</a>
+        </div>
+        <div class="main_nav_item" id="main_output">
+            <a id="main_output_link"  class="link navlink" style=" text-decoration: none;color: white " href="{% url 'Output' %}">Output</a>
+        </div>
+
+        <div style="display: flex;flex-direction: row;width: 20%; margin-left: 20px">
+            <div>
+                <img title="Write your notes here" style=" margin-top: 8px;margin-right: 40px" width="30" height=30" src="{% static 'Images/writing.png' %}" id="myBtn">
+            </div>
+            <div>
+                <a title="Go back to the home page" class="link" href="{% url 'Home' %}"><img style="margin-top: 8px;" width="30" height=30" src="{% static 'Images/icons8-home-50.png' %}"></a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    var modal = document.getElementById("myModal");
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+    var clearNotes = document.getElementById("clearNotes");
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    // When the user clicks the button, open the modal
+    btn.onclick = function () {
+
+        document.getElementById("Notes").innerText = sessionStorage.getItem("NotesContent");
+        modal.style.display = "block";
+
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+
+        var notes;
+        notes = document.getElementById("Notes").innerText;
+        sessionStorage.setItem("NotesContent", notes)
+        console.log(notes);
+        modal.style.display = "none";
+
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+</script>
+
+{% block content %}
+    {#        Other HTML which extends this HTML will get embed here#}
+{% endblock %}
 
 </body>
 

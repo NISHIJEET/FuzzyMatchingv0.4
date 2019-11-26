@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="226c9804-e6c7-4062-8cf4-7d2a8d5469e1" name="C:\Users\sj17644\Desktop\Fuzzy - Published Folder" url="http://localhost">
+        <fileTransfer port="0" mountedRoot="C:\Users\sj17644\Desktop\Fuzzy - Published Folder" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>

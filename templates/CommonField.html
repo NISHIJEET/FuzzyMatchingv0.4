@@ -1,0 +1,98 @@
+{% extends "Navigation.html" %}
+{% load static %}
+{% block content %}
+
+    <div class="flex-subcontaioner">
+        <div class="subnavigation" id="Input1"><a id="columns" style=" text-decoration: none; color: white"
+                                                  class="link navlink" href="{% url 'Source' %}">Input Source/ITM</a>
+        </div>
+        <div class="subnavigation" id="Input2" style="background-color: white"><a id="concate"
+                                                                                  style=" text-decoration: none;color: black"
+                                                                                  class="link navlink">Common
+            Columns</a></div>
+    </div>
+
+    <div class="InputFileds instruction">
+        Select columns on the basis of which you run fuzzy match . In case of the no selection all the common columns will
+        participate in the match.
+    </div>
+
+    <div class="layout">
+        <h4 class="topsection"> Select Columns</h4>
+        <div style="margin-top: 15px;margin-left: 78.5%">
+            <a class="next" style="text-decoration: none;color: darkorange" href="{% url 'ConcatCommonFields' %}">Next</a>
+        </div>
+    </div>
+    <div class="columnnsconcat">
+
+        <form style="width: 20%;margin: 5px;" method="POST" enctype="multipart/form-data"
+              action="{% url 'CommonField' %}">
+            {% csrf_token %}
+            <h5 style="display: inline-block;font-size: 16px">Select Columns:</h5>
+            <div style="display: flex;flex-direction: row">
+                <div>
+                    <select name="SelectCommonColumns" id="DDLActivites" data-style="btn-default"
+                            class="selectpicker form-control" multiple>
+                        {% for col in column_list %}
+                            {% if col in colSelections %}
+                                <option selected value={{ col }}>{{ col }}</option>
+                            {% else %}
+                                <option value={{ col }}>{{ col }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <input title="Save selections" type="image" alt="Submit" style="margin-left: 10px;margin-top: 0px"
+                           src="{% static 'Images/tick.png' %}" alt="Submit" width="35" height="35"
+                           onclick=" return ValidateCommonFileds()">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div style="margin-left: 50px; width: 100%">
+        <p id="fileTitle1"></p>
+        <div class="tabletititles" style="margin-left: 0px">Source Data</div>
+        <div style="overflow-x: auto">
+            <table class="displaytable" contenteditable="false" style="margin-left: 0px">
+
+                {% for cell in source_data.columns.tolist %}
+                    <th style="background-color: lightgray">{{ cell }}&nbsp;</th>
+                {% endfor %}
+
+
+                {% for index,row in source_data.head.iterrows %}
+                    <tr style="width: 40%">
+                        {% for str_val in row.values %}
+                            <th>{{ str_val }}&nbsp;</th>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <p id="fileTitle1"></p>
+        <div class="tabletititles" style="margin-left: 0px">ITM Data</div>
+        <div style="overflow-x: auto">
+            <table class="displaytable" contenteditable="false" style="margin-left: 0px">
+
+                {% for cell in data.columns.tolist %}
+                    <th style="background-color: lightgray">{{ cell }}&nbsp;</th>
+                {% endfor %}
+
+                {% for index,row in data.head.iterrows %}
+                    <tr style="width: 40%">
+                        {% for str_val in row.values %}
+                            <th>{{ str_val }}&nbsp;</th>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{#    <div>#}
+{#        <a class="next" style="text-decoration: none;color: darkorange" href="{% url 'ConcatCommonFields' %}">Next</a>#}
+{#    </div>#}
+
+{% endblock %}

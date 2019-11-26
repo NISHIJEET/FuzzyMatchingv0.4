@@ -1,59 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "Navigation.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ControlSettings</title>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
-</head>
+{% block content %}
 
-<body>
+    <div class="flex-subcontaioner">
+        <div class="subnavigation" id="1" ><a id="columns" style=" text-decoration: none;color: white " class="link navlink" href="{% url 'ConcatCommonFields'  %} " disabled="disabled">Concat Fields</a></div>
+        <div class="subnavigation" id="2" ><a  id="concate" style=" text-decoration: none;color: white" class="link navlink" href="{% url 'CatFieldSelection' %}">Categorical Fields</a></div>
+{#        <div class="subnavigation" id="3"  ><a id="prerun" style=" text-decoration: none;" class="link navlink" href="{% url 'PreRun' %}">Pre Run</a></div>#}
+        <div class="subnavigation" id="4"  ><a id="replacewords" style=" text-decoration: none;color: white" class="link navlink" href="{% url 'ReplaceWords' %}">Replace Words</a></div>
+        <div class="subnavigation" id="5"  ><a id="csettings" style=" text-decoration: none;color: black" class="link navlink" >Control Settings</a></div>
+    </div>
 
-    {% extends "Navigation.html" %}
+    <div class="InputFileds instruction">
+    You can alter the mentioned control setting on the basis of your requirement. Default settings are given in each section here. 
+    </div>
 
-     {% block content %}
-         <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" action="{% url 'Output' %}">
 
-                <h4 style="margin-left:50px;margin-top: 20px"> Define Control Settings here</h4>
-                <Div class="mainControlSettings" >
+        <h4 class="topsection"> Define Control Settings here</h4>
+        <Div class="mainControlSettings">
 
-                    {% csrf_token %}
-                    <div class="CSinputfileds">
-                        <label for="matches" style="margin-left: 20px">Number Of Matches To Find:</label>
-                        <input id="matches" type="number" name="Matches" min="10" max="100"  class= "CSinputs" style="margin-left: 111px" required="required">
-                    </div >
+            {% csrf_token %}
+            <div class="CSinputfileds">
+                <h7 for="matches" style="margin-left: 20px">Number Of Matches To Find:</h7>
+                <input id="matches" type="number" name="matches" min="0" max="100" value="100" class="CSinputs"
+                       style="margin-left: 111px" required="required">
+                <div class="info">Maximum number of matches to find for any record.</div>
+            </div>
 
-                    <div class="CSinputfileds">
-                        <label for="mimMQ" style="margin-left: 20px">Minimum Acceptable Match Quality:</label>
-                        <input id="mimMQ" type="number" name="MinMQ" min="10" max="100" class= "CSinputs" style="margin-left: 60px"  required="required">
-                    </div>
+            <div class="CSinputfileds">
+                <h7 for="mimMQ" style="margin-left: 20px">Minimum Acceptable Match Quality:</h7>
+                <input id="mimMQ" type="number" name="mimMQ" min="0" max="100" value="40" class="CSinputs"
+                       style="margin-left: 66px" required="required">
+                <div class="info">Minimum threshold for match quality (25% means that any match below 25% of match quality is ignored).  </div>
+            </div>
 
-                    <div class="CSinputfileds">
-                        <label for="mimMQ" style="margin-left: 20px">Acceptable Match Quality Range/Drop:</label>
-                        <input id="drop" type="number" name="Drop" min="10" max="100" class= "CSinputs" style="margin-left: 45px"  required="required">
-                    </div>
+            <div class="CSinputfileds">
+                <h7 for="drop" style="margin-left: 20px">Acceptable Match Quality Range/Drop:</h7>
+                <input id="drop" type="number" name="drop" min="0" max="100" value="10" class="CSinputs" style="margin-left: 47px"
+                       required="required">
+                <div class="info">Remove matches where the match quality drops by more that this level relative to the best match for the same record. </div>
+            </div>
 
-                    <div class="CSinputfileds">
-                        <label for="mimMQ" style="margin-left: 20px">Good Quality Match:</label>
-                        <input id="goodmatch" type="number" name="Goodmatch" min="10" max="100" class= "CSinputs" style="margin-left: 162px"  required="required">
-                    </div>
+            <div class="CSinputfileds">
+                <h7 for="goodmatch" style="margin-left: 20px">Good Quality Match:</h7>
+                <input id="goodmatch" type="number" name="goodmatch" min="0" max="100" value="80" class="CSinputs"
+                       style="margin-left: 160px" required="required">
+                <div class="info">Minimum threshold for a good quality match. The value will be considered in percentage.</div>
+            </div>
 
-                    <div class="CSinputfileds">
-                        <label for="mimMQ" style="margin-left: 20px">Moderate Quality Match:</label>
-                        <input id="moderatematch" type="number" name="Moderatematch" min="10" max="100" class= "CSinputs" style="margin-left: 134px"  required="required">
-                    </div>
+            <div class="CSinputfileds">
+                <h7 for="mimMQ" style="margin-left: 20px">Moderate Quality Match:</h7>
+                <input id="moderatematch" type="number" name="moderatematch" min="0" max="100" value="60" class="CSinputs"
+                       style="margin-left: 136px" required="required">
+                <div class="info">Minimum threshold for a moderate quality match. The value will be considered in percentage.</div>
+            </div>
+        </Div>
 
-                    <div class="CSinputfileds" style="margin-left: 25px;margin-bottom: 50px">
-                        <input type="submit" class="button" value="Run Fuzzy Macth " style="height: 45px; width: 12%; border: 1px solid gray; border-radius: 2px; cursor: pointer">
-                    </div>
+        <div class="CSinputfileds" style="margin-left:83%;margin-bottom: 50px">
+                <button class="button" value="Run Fuzzy Match " style="height: 30px; width: 80%;margin-left: 30%;margin-right: 35px" onclick="return validateControlSetting()">Run </button>
+        </div>
 
-                </Div>
+    </form>
 
-         </form>
-
-    {% endblock %}
-
-</body>
-
-</html>
+{% endblock %}

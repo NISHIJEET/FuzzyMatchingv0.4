@@ -1,46 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PreRun</title>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
+{% extends "Navigation.html" %}
 
-</head>
+{% block content %}
 
-<body onload="myfunc()">
+   <div class="flex-subcontaioner">
+        <div class="subnavigation" id="1" ><a id="columns" style=" text-decoration: none; " class="link navlink" href="{% url 'ConcatCommonFields' %}">Concat Fields</a></div>
+        <div class="subnavigation" id="2" ><a  id="concate" style=" text-decoration: none;" class="link navlink" href="{% url 'CatFieldSelection' %}">Categorical Fields</a></div>
+        <div class="subnavigation" id="3"  ><a id="prerun" style=" text-decoration: none;" class="link navlink" href="{% url 'ConcatCommonFields' %}">Pre Run</a></div>
+        <div class="subnavigation" id="4"  ><a id="replacewords" style=" text-decoration: none;" class="link navlink" href="{% url 'ReplaceWords' %}">Replace Words</a></div>
+        <div class="subnavigation" id="5"  ><a id="csettings" style=" text-decoration: none;" class="link navlink" href="{% url 'ControlSettings' %}">Control Settings</a></div>
+    </div>
 
-    {% extends "Navigation.html" %}
+    <h4 style="margin-left:50px;margin-top: 20px"> Select Fileds to Replace</h4>
+    <div class="columnnsconcat">
+        <form action="" method="get" style="margin: 20px;margin-left: 30px">
+            <label style="display: inline-block">Category 1</label><br>
+            <input type="checkbox" name="vehicle" value="Bike"> I have a bike<br>
+            <input type="checkbox" name="vehicle" value="Car" checked> I have a car<br>
+            <br>
+            <input type="submit" value="Replace" class="button"
+                   style="height: 40px; width: 80%; border: 1px solid gray; border-radius: 2px; cursor: pointer">
+        </form>
+    </div>
 
-     {% block content %}
-         <h4 style="margin-left:50px;margin-top: 20px"> Select Fileds to Replace</h4>
-         <div class="columnnsconcat">
-             <form action="" method="get" style="margin: 20px;margin-left: 30px">
-                  <label style="display: inline-block">Category 1</label><br>
-                  <input  type="checkbox" name="vehicle" value="Bike"> I have a bike<br>
-                  <input type="checkbox" name="vehicle" value="Car" checked> I have a car<br>
-                  <br>
-                  <input type="submit" value="Replace" class="button" style="height: 40px; width: 80%; border: 1px solid gray; border-radius: 2px; cursor: pointer">
-            </form>
-        </div>
-
-         <p id="fileTitle1" ></p>
-         <table class="displaytable" contenteditable="false">
-            {% for row in excel_data1 %}
-                <tr>
+    <p id="fileTitle1"></p>
+    <table class="displaytable" contenteditable="false">
+        {% for row in excel_data1 %}
+            <tr>
                 {% for cell in row %}
                     <td>{{ cell }}&nbsp;</td>
                 {% endfor %}
-                </tr>
-            {%  endfor %}
-         </table>
+            </tr>
+        {% endfor %}
+    </table>
 
-         <div>
-            <a class="next" href="{% url 'ReplaceWords' %}">Next</a>
-         </div>
+    <div>
+        <a class="next" href="{% url 'ReplaceWords' %}">Next</a>
+    </div>
 
-    {% endblock %}
-
-</body>
-
-</html>
+{% endblock %}

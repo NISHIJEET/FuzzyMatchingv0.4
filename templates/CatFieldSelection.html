@@ -1,52 +1,107 @@
+{% extends "Navigation.html" %}
+{% load static %}
+{% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CatFieldSelection</title>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
-</head>
+    <div class="flex-subcontaioner">
+        <div class="subnavigation" id="1"><a id="columns" style=" text-decoration: none; color: white;" class="link navlink"
+                                             href="{% url 'ConcatCommonFields' %}">Concat Fields</a></div>
+        <div class="subnavigation" id="2"><a id="concate" style=" text-decoration: none;color:black" class="link navlink">Categorical
+            Fields</a></div>
+        {#        <div class="subnavigation" id="3"  ><a id="prerun" style=" text-decoration: none;" class="link navlink" href="{% url 'PreRun' %}">Pre Run</a></div>#}
+        <div class="subnavigation" id="4"><a id="replacewords" style=" text-decoration: none;color: white" class="link navlink">Replace
+            Words</a></div>
+        <div class="subnavigation" id="5"><a id="csettings" style=" text-decoration: none;color: white" class="link navlink">Control
+            Settings</a></div>
+    </div>
 
-<body onload="myfunc()">
+    <div class="InputFileds instruction">
+        Select the fields you want to define as category and for remaining fields you can assign weights. The default
+        weight is 1 here for every field which is not selected as category.
+    </div>
 
-    {% extends "Navigation.html" %}
+    <div class="layout">
+        <h4 class="topsection">Categorical Field Selections</h4>
+        <div style="margin-top: 15px;margin-left: 69.5%">
+            <a class="next" style="text-decoration: none;color: darkorange" onclick="return ValidateIfWeightisEmpty()" href="{% url 'ReplaceWords' %}">Next</a>
+        </div>
+    </div>
 
-     {% block content %}
+    <form method="POST" enctype="multipart/form-data" action="{% url 'SavedWeights' %}">
+        {% csrf_token %}
+        <div class="columnnsconcat">
+            <h5 style="margin-left: 10px;margin-top: 12px;font-size: 16px">Select Categorical fields:</h5>
+            <div style="width: 20%;margin: 5px;display: flex;flex-direction: row">
+                <div>
+                    <select name="SelectCatColumns" id="SelectCatColumns" data-style="btn-default"
+                            class="selectpicker form-control" multiple onchange="GetColumnsToWeight(this)" >
+                        {% for col in column_list %}
+                            <option value={{ col }}>{{ col }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-         <h4 style="margin-left:50px;margin-top: 20px">Categorical Field Selections</h4>
-         <div class="columnnsconcat">
-             <label style="margin-left: 10px;margin-top: 8px;font-size: larger;">Select Categorical fields:</label>
-             <form style="width: 20%;margin: 5px;">
-                <select name="SelectCommonColumns"  id="DDLActivites" data-style="btn-default" class="selectpicker form-control" multiple>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                </select>
-                <input type="submit" style="height: 40px; width: 60%; border: 1px solid gray; border-radius: 2px; cursor: pointer" class="button" value="Save Selections">
-            </form>
-         </div>
+            </div>
+        </div>
+        <div id="weights">
+            <h4 class="topsection">Define Weights</h4>
+            <div class="columnnsconcat" id="columnnsconcat" style="display: flex;flex-wrap: wrap">
+                {% for col in column_list %}
+                    <div style="width: 100px;margin: 8px;display: block;margin-bottom: 0px" name="weights" id={{ col }}>
+                        {{ col }}
+                        <input name={{ col }} type="number" style="display: block; width: 100%;font-size: 14px" min="1" max="30" value="1">
+                        <br>
+                    </div>
+                {% endfor %}
 
-         <h4 style="margin-left:50px;margin-top: 20px">Define Weights</h4>
-         <div class="columnnsconcat">
-            <form  style="margin: 10px;" action="">
-                First name: <input type="number" name="firstname" value="Mickey" style="margin:6px">
-                <br>
-                Last name:<input type="number" name="lastname" value="Mouse" style="margin:10px">
+            </div>
 
-                <br>
-                <input type="submit" value="Submit" style="height: 40px; width: 60%; border: 1px solid gray; border-radius: 2px; cursor: pointer"  class="button">
-            </form>
-         </div>
+        </div>
+        <input type="submit" value="Submit" style="height: 30px; width: 8%; margin-left: 4%;margin-top: 0%" class="button">
+    </form>
 
-         <div>
-            <a class="next" href="{% url 'PreRun' %}">Next</a>
-         </div>
+    <div style="margin-top: 0%;margin-left: 50px;width: 94.5%">
 
-    {% endblock %}
+        <div id="fileTitle2" class="tabletititles" style="margin-left: 0px">Source File</div>
+        <div style="overflow-x: auto">
+            <table class="displaytable" contenteditable="false" style="margin-left: 0px">
 
-</body>
+                {% for cell in data_source.columns.tolist %}
+                    <th style="background-color: lightgray">{{ cell }}&nbsp;</th>
+                {% endfor %}
 
-</html>
+
+                {% for index,row in data_source.head.iterrows %}
+                    <tr style="width: 40%">
+                        {% for str_val in row.values %}
+                            <th>{{ str_val }}&nbsp;</th>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div id="fileTitle2" class="tabletititles" style="margin-left: 0px">ITM File</div>
+        <div style="overflow-x: auto">
+            <table class="displaytable" contenteditable="false" style="margin-left: 0px">
+
+                {% for cell in data.columns.tolist %}
+                    <th style="background-color: lightgray">{{ cell }}&nbsp;</th>
+                {% endfor %}
+
+
+                {% for index,row in data.head.iterrows %}
+                    <tr style="width: 40%">
+                        {% for str_val in row.values %}
+                            <th>{{ str_val }}&nbsp;</th>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {#        <div>#}
+        {#            <a class="next" style="text-decoration: none;color: darkorange" onclick="return ValidateIfWeightisEmpty()"#}
+        {#               href="{% url 'ReplaceWords' %}">Next</a>#}
+        {#        </div>#}
+    </div>
+{% endblock %}
+
+

@@ -1,8 +1,10 @@
 from django.shortcuts import render
+from Input.views import data
+# This will be the landing page of your tool
 
-# Create your views here.
 def Home(request):
-    return render(request, 'home.html', )
+    # data = {'modal': "", 'file_selected': False}
+    return render(request, 'home.html' )
 
 
 

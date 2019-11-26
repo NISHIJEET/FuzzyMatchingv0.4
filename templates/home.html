@@ -2,32 +2,46 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <title>Landing Page</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
     <link rel="stylesheet/less" type="text/css" href="{% static 'css/index.less' %}">
     <link rel="stylesheet/less" type="text/css" href="{% static 'css/home.less' %}">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
 </head>
 
-<body >
-     <div class="flex-toppannel">
-         <div class="toppannel">eZSt Fuzzy MatchMaker Pro</div>
-         <div style="text-align: center">
-             <a class="headerpannel link" href="{% url 'Source' %}">Get started with the Fuzzy matching Tool </a>
-         </div>
-     </div>
+<body>
 
-     <div class="home">
-         <img src="{% static 'Images/analytics.jpg' %}" >
-         {#style="display: block; margin: auto;align-content: center"#}
-     </div>
+<div style="background-image: url({% static 'Images/background.jpg' %});width: 100%; height: 65%">
+    <div class="toppannel">eZSt Fuzzy MatchMaker Pro</div>
+    <div style="text-align: center;margin-top: 8%">
+        <a class="startbox headerpannel link" href="{% url 'Source' %}">Get started with the Fuzzy Matching Tool </a>
+    </div>
+</div>
 
-     <div class="footer">
-         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-     </div>
+<div class="subSection">
+
+    <div>
+        <img class="catImage" src="{% static 'Images/folder (1).png' %}">
+        <p class="catContent">Input files to run fuzzy match on. In this section you can
+            also select the parameters to improve the efficiency of match results.</p>
+    </div>
+
+    <div>
+        <img class="catImage" src="{% static 'Images/settings.png' %}">
+        <p class="catContent">Configure tool by providing the necessary inputs at different stages and several required
+            settings. You can clean your input file here for better results.</p>
+    </div>
+
+    <div>
+        <img class="catImage" src="{% static 'Images/clipboard.png' %}">
+        <p class="catContent">This section is intended to display the results of fuzzy match algorithm on input file you
+            choose after altering it in the configuration section as desired. </p>
+    </div>
+
+</div>
 
 </body>
 
